@@ -4,7 +4,12 @@ using System.Text;
 
 namespace ProjectZero.Library
 {
-    class CustomerTable
+    class CustomerTable : ITable
     {
+        public void DisplayTable(string data)
+        {
+            // Convert data json to Customer list then display Customers.
+            throw new NotImplementedException();
+        }
     }
 }
