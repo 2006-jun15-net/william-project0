@@ -6,17 +6,22 @@ namespace ProjectZero.Library
 {
     class Order
     {
-        Customer Customer { get; }
-        Store Store { get; }
-        string Time { get; }
-        List<Product> Products { get; }
+        Customer customer;
+        Store store;
+        string time;
+        List<Product> products;
+
+        public Customer Customer { get { return customer; } }
+        public Store Store { get {return store; } }
+        public string Time { get { return time; } }
+        public List<Product> Products { get { return products; } }
 
         public Order(Customer customer, Store store, string time, List<Product> products)
         {
-            Customer = customer;
-            Store = store;
-            Time = time;
-            Products = products;
+            this.customer = customer;
+            this.store = store;
+            this.time = time;
+            this.products = products;
         }
 
 

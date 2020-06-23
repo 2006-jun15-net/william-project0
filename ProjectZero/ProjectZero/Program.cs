@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using ProjectZero.Library;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json.Serialization;
+﻿using System;
 using System.Threading.Tasks;
+using ProjectZero.Library;
+using ProjectZero.Library.RunnerClasses;
 
 namespace ProjectZero
 {
     class Program
     {
         const string CUSTOMER_FILE = "../../../customers.json";
-        const string PRODUCT_FILE = "../products.json";
-        const string STORE_FILE = "../stores.json";
+        const string PRODUCT_FILE = "../../../products.json";
+        const string STORE_FILE = "../../../stores.json";
 
         static async Task Main(string[] args)
         {
@@ -29,7 +26,7 @@ namespace ProjectZero
             // Take input
             string choice = "";
             // Program loop
-            while (choice != "q")
+            while (choice != "q" && choice != "quit")
             {
                 // Display user options
                 Console.WriteLine("\n[option] - (operation to execute)");
@@ -48,10 +45,10 @@ namespace ProjectZero
                 switch (choice.ToLower())
                 {
                     case "cc":
-                        await Program.CreateCustomerAsync();
+                        await CustomerRunner.CreateCustomerAsync(CUSTOMER_FILE);
                         break;
                     case "dc":
-                        Console.WriteLine("cust table");
+                        await CustomerRunner.DisplayCustomersAsync(CUSTOMER_FILE);
                         break;
                     case "do":
                         Console.WriteLine("order deets");
@@ -69,11 +66,10 @@ namespace ProjectZero
                         Console.WriteLine("place order");
                         break;
                     case "search":
-                        Console.WriteLine("search for customer");
+                        Console.WriteLine("Found " + CustomerRunner.SearchForCustomer(CUSTOMER_FILE));
                         break;
                     case "q":
                     case "quit":
-                        Console.WriteLine("quit");
                         break;
                     default:
                         continue; // Display help (user options).
@@ -83,33 +79,5 @@ namespace ProjectZero
             //////
         }
 
-        private static async Task CreateCustomerAsync()
-        {
-            Console.WriteLine("Enter first and last name (firstName lastName)");
-
-            try
-            {
-                string[] tokens = Console.ReadLine().Split();
-                string firstName = tokens[0];
-                string lastName = tokens[1];
-            
-                Customer customer = new Customer(firstName, lastName);
-                // Convert customer and append to file
-                string json = JsonConvert.SerializeObject(customer);
-
-                await File.AppendAllTextAsync(CUSTOMER_FILE, json.Length > 2 ? json : "Something went wrong");
-
-                Console.WriteLine(Path.GetFullPath(CUSTOMER_FILE));
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Customer not created. Expected: (firstName lastName)");
-            }
-            
-        }
     }
 }
