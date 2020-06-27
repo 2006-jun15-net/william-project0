@@ -18,12 +18,7 @@ namespace ProjectZero.Library.RunnerClasses
                 string firstName = tokens[0].ToLower();
                 string lastName = tokens[1].ToLower();
 
-                FileStream fs;
-                if (!File.Exists(fileName))
-                {
-                    fs = File.Create(fileName);
-                    fs.Close();
-                }
+                FileOps.CheckFileExists(fileName);
 
                 List<Customer> customerList;
                 using (StreamReader file = File.OpenText(fileName) )
@@ -80,13 +75,14 @@ namespace ProjectZero.Library.RunnerClasses
         public static Customer SearchForCustomer(string fileName)
         {
             Console.WriteLine("Enter first and last name to search (firstName lastName)");
-            string[] tokens = Console.ReadLine().Split();
-            string firstName = tokens[0].ToLower();
-            string lastName = tokens[1].ToLower();
 
             Customer customer = new Customer("", "");
             try
             {
+                string[] tokens = Console.ReadLine().Split();
+                string firstName = tokens[0].ToLower();
+                string lastName = tokens[1].ToLower();
+
                 using (StreamReader file = File.OpenText(fileName))
                 {
                     JsonSerializer serializer = new JsonSerializer();

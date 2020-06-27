@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace ProjectZero.Library
@@ -13,6 +15,26 @@ namespace ProjectZero.Library
         {
             Name = name;
             Cost = cost;
+        }
+
+        public static void DisplayProducts(string productFile)
+        {
+            try
+            {
+                FileOps.CheckFileExists(productFile);
+
+                List<Product> productList;
+                using (StreamReader file = File.OpenText(productFile))
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    productList = (List<Product>)serializer.Deserialize(file, typeof(List<Product>))
+                        ?? new List<Product>();
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public override string ToString()
