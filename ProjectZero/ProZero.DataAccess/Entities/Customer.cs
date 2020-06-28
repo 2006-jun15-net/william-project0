@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProjectZero.Library
+namespace ProjectZero.DataAccess.Entities
 {
     [Serializable()]
     public class Customer

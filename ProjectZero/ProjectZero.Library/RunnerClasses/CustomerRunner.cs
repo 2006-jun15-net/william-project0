@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using ProjectZero.Library.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,13 +21,15 @@ namespace ProjectZero.Library.RunnerClasses
 
                 FileOps.CheckFileExists(fileName);
 
-                List<Customer> customerList;
-                using (StreamReader file = File.OpenText(fileName) )
-                {
-                    JsonSerializer serializer = new JsonSerializer();
-                    customerList = (List<Customer>)serializer.Deserialize(file, typeof(List<Customer>))
-                        ?? new List<Customer>();
-                }
+                List<Customer> customerList = new List<Customer>();
+                // using (StreamReader file = File.OpenText(fileName) )
+                // {
+                //     JsonSerializer serializer = new JsonSerializer();
+                //     customerList = (List<Customer>)serializer.Deserialize(file, typeof(List<Customer>))
+                //         ?? new List<Customer>();
+                // }
+
+
 
                 customerList.Add(new Customer(firstName, lastName));
                 // Convert customer and append to file
