@@ -138,7 +138,7 @@ INSERT INTO StoreOrder (ProductId, Amount, OrderId) VALUES
 ---------------------------------------------------------------------- End ISERTions ----
 
 SELECT * FROM StoreLocation
-SELECT * FROM Product
+SELECT * FROM Product WHERE ProductId = (SELECT ProductId FROM Product WHERE ProductId=9)
 SELECT * FROM Inventory
 SELECT * FROM Customer
 SELECT * FROM OrderHistory

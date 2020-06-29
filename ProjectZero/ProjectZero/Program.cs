@@ -6,9 +6,7 @@ namespace ProjectZero
 {
     class Program
     {
-        const string CUSTOMER_FILE = "../../../customers.json";
-        const string PRODUCT_FILE = "../../../products.json";
-        const string STORE_FILE = "../../../stores.json";
+        
 
         static async Task Main(string[] args)
         {
@@ -44,10 +42,10 @@ namespace ProjectZero
                 switch (choice.ToLower())
                 {
                     case "cc":
-                        await CustomerRunner.CreateCustomerAsync(CUSTOMER_FILE);
+                        await CustomerRunner.CreateCustomerAsync();
                         break;
                     case "dc":
-                        await CustomerRunner.DisplayCustomersAsync(CUSTOMER_FILE);
+                        await CustomerRunner.DisplayCustomersAsync();
                         break;
                     case "do":
                         Console.WriteLine("order deets");
@@ -56,7 +54,7 @@ namespace ProjectZero
                         Console.WriteLine("store hist");
                         break;
                     case "coh":
-                        Console.WriteLine("cust hist");
+                        CustomerRunner.DisplayCustomerDetails();
                         break;
                     case "open":
                         Console.WriteLine("new loaction");
@@ -65,7 +63,7 @@ namespace ProjectZero
                         Console.WriteLine("place order");
                         break;
                     case "search":
-                        Console.WriteLine("Found " + CustomerRunner.SearchForCustomer(CUSTOMER_FILE));
+                        Console.WriteLine(string.Join("\n\t", CustomerRunner.SearchForCustomer()));
                         break;
                     case "q":
                     case "quit":
