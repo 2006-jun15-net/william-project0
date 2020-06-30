@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ProjectZero.Library.Model
+namespace ProjectZero.DataAccess.Model
 {
     public partial class OrderHistory
     {

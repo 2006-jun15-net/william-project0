@@ -21,8 +21,6 @@ namespace ProjectZero.Library.RunnerClasses
                 Console.WriteLine("Enter product code to order:");
 
 
-                FileOps.CheckFileExists(fileName);
-
 
 
             }

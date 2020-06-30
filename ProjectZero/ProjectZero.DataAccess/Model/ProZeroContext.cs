@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ProjectZero.Library.Model
+namespace ProjectZero.DataAccess.Model
 {
     public partial class ProZeroContext : DbContext
     {
@@ -22,7 +22,6 @@ namespace ProjectZero.Library.Model
         public virtual DbSet<StoreLocation> StoreLocation { get; set; }
         public virtual DbSet<StoreOrder> StoreOrder { get; set; }
 
-       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

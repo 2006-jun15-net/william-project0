@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ProjectZero.DataAccess\ProjectZero.DataAccess.csproj" />
     <ProjectReference Include="..\ProjectZero.Library\ProjectZero.Library.csproj" />
   </ItemGroup>
 

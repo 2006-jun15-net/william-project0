@@ -1,9 +1,9 @@
 using System.Xml.Serialization;
-using ProjectZero.Library.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using System.Collections.Generic;
 using ProjectZero.Library.Interfaces;
+using ProjectZero.DataAccess.Model;
 
 namespace ProjectZero
 {
