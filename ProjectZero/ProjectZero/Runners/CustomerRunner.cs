@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ProjectZero.DataAccess;
+using System.Diagnostics;
 //using NLog;
 
 
@@ -46,7 +47,7 @@ namespace ProjectZero.Library.RunnerClasses
             {
                 List<Customer> customerList = ProZeroRepo.DbContext.Customer.Select(Maps.Map).ToList();
                 if(customerList == null) throw new Exception("No customers in Database. Nothing to display.");
-                // IEnumerable<Customer>customers = _dbContext.Customer;
+                
                 foreach (Customer customer in customerList)
                 {
                     Console.WriteLine("Customer: " + customer.FirstName + " " + customer.LastName);
@@ -58,26 +59,41 @@ namespace ProjectZero.Library.RunnerClasses
             }
         }
 
-        /// Search by first and last name
-        public static List<Customer> SearchForCustomer()
+        public static void DisplayCustomerSearch()
         {
             Console.WriteLine("Enter first and last name to search (firstName lastName)");
+            List<Customer> foundCustomers = SearchForCustomer(Console.ReadLine());
 
+            foreach(Customer cust in foundCustomers)
+            {
+                Console.WriteLine("Customer: " + cust.FirstName + " " + cust.LastName);
+            }
+        }
+
+        /// Search by first and last name
+        public static List<Customer> SearchForCustomer(string firstLast)
+        {
             try
             {
-                string[] tokens = Console.ReadLine().Split();
+                string[] tokens = firstLast.Split();
                 string firstName = tokens[0].ToLower();
                 string lastName = tokens[1].ToLower();
 
-                List<Customer> foundCustomers = ProZeroRepo.DbContext.Customer.Select(Maps.Map).ToList();
+                List<Customer> allCustomers = ProZeroRepo.DbContext.Customer.Select(Maps.Map).ToList();
+                List<Customer> foundCustomers = new List<Customer>();
 
-                if (foundCustomers == null) throw new Exception("No customers in Database.");
-                //.Where(c => c.FirstName == firstName && c.LastName == lastName).ToList();
-                foreach(Customer cust in foundCustomers)
+                // Get all customers
+                if (allCustomers == null) throw new Exception("No customers in Database.");
+                
+
+
+                foreach(Customer cust in allCustomers)
                 {
-                    if(cust.FirstName != firstName || cust.LastName != lastName)
+                    if(cust.FirstName == firstName && cust.LastName == lastName)
                     {
-                        foundCustomers.Remove(cust);
+                        // remove cust from foundCustomers
+                        Debug.WriteLine(cust.FirstName);
+                        foundCustomers.Add(cust);
                     }
                 }
 
@@ -87,13 +103,14 @@ namespace ProjectZero.Library.RunnerClasses
                 }
                 else
                 {
-                    throw new Exception("Customer not found exception.");
+                    Console.WriteLine("Customer not found.");
+                    return new List<Customer>();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return null;
+                Debug.WriteLine(ex);
+                return new List<Customer>();
             }
         }
 
@@ -111,22 +128,42 @@ namespace ProjectZero.Library.RunnerClasses
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Case "coh"
+        /// Display details of customer.
+        /// </summary>
         public static void DisplayCustomerDetails()
         {
-            List<Customer> customers = SearchForCustomer();
+            Console.WriteLine("Enter first and last name to search (firstName lastName)");
+            List<Customer> customers = SearchForCustomer(Console.ReadLine());
+
             foreach (var cust in customers)
             {
                 Console.WriteLine("Id: " + cust.CustomerId);
-                Console.WriteLine("Order history: " + cust.OrderHistory);
+
+                // Get order history
+                List<StoreOrder> orders = GetCustomerOrderHistory(cust);
+                Console.Write("Order history: ");
+                foreach(StoreOrder order in orders)
+                {
+                    // GetProductById
+                    var query = ProZeroRepo.DbContext.Product.Where(p => p.ProductId == order.ProductId)
+                        .FirstOrDefault();
+                    Product product = Mapper.MapProduct(query);
+                    Console.Write("{ qty=" + order.Amount + ": " + product.Name + " }");
+                }
+                Console.WriteLine();
             }
         }
 
-        List<DataAccess.Model.StoreOrder> GetCustomerOrderHistory(Customer customer)
+        public static List<StoreOrder> GetCustomerOrderHistory(Customer customer)
         {
-            List<DataAccess.Model.StoreOrder> orders = ProZeroRepo.DbContext.Customer.Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
-            .SelectMany(o => o.OrderHistory)
-            .SelectMany(h => h.StoreOrder).ToList();
-            return orders;
+            var orders = ProZeroRepo.DbContext.Customer
+                .Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
+                .SelectMany(o => o.OrderHistory)
+                .SelectMany(h => h.StoreOrder);
+
+            return orders.Select(Maps.Map).ToList();
         }
         void Save()
         {

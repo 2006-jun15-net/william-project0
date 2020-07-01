@@ -75,7 +75,7 @@ namespace ProjectZero.DataAccess
             {
                 ProductId = product.ProductId,
                 Name = product.Name,
-                Price = product.Price ?? throw new Exception("Null Price on Product in mapper maps."),
+                Price = product.Price ?? 0.00m,
                 StoreOrder = product.StoreOrder.Select(Maps.Map).ToList(),
                 Inventory = product.Inventory.Select(Maps.Map).ToList()
             };

@@ -65,7 +65,7 @@ namespace ProjectZero
                         Console.WriteLine("place order");
                         break;
                     case "search":
-                        Console.WriteLine(string.Join("\n\t", CustomerRunner.SearchForCustomer()));
+                        CustomerRunner.DisplayCustomerSearch();
                         break;
                     case "q":
                     case "quit":
