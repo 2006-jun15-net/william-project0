@@ -12,11 +12,11 @@ namespace ProjectZero.Library.RunnerClasses
     public class CustomerRunner //: IProZeroRepo
     {
         //private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
-        private static readonly DataAccess.Model.ProZeroContext _dbContext;
+        //private readonly DataAccess.Model.ProZeroContext _dbContext;
 
 
 
-        public static async Task CreateCustomerAsync()
+        public static void CreateCustomer()
         {
             Console.WriteLine("Enter first and last name (firstName lastName)");
 
@@ -40,17 +40,17 @@ namespace ProjectZero.Library.RunnerClasses
             }
         }
 
-        public static async Task DisplayCustomersAsync()
+        public static void DisplayCustomers()
         {
             try
             {
-                //Maps.Map(_dbContext.Customer);
-                
-                //// IEnumerable<Customer>customers = _dbContext.Customer;
-                //foreach (Customer customer in customerList)
-                //{
-                //    Console.WriteLine("Customer: " + customer);
-                //}
+                List<Customer> customerList = ProZeroRepo.DbContext.Customer.Select(Maps.Map).ToList();
+                if(customerList == null) throw new Exception("No customers in Database. Nothing to display.");
+                // IEnumerable<Customer>customers = _dbContext.Customer;
+                foreach (Customer customer in customerList)
+                {
+                    Console.WriteLine("Customer: " + customer.FirstName + " " + customer.LastName);
+                }
             }
             catch (Exception ex)
             {
@@ -69,8 +69,9 @@ namespace ProjectZero.Library.RunnerClasses
                 string firstName = tokens[0].ToLower();
                 string lastName = tokens[1].ToLower();
 
-                List<Customer> foundCustomers = _dbContext.Customer.Select(Maps.Map).ToList();
+                List<Customer> foundCustomers = ProZeroRepo.DbContext.Customer.Select(Maps.Map).ToList();
 
+                if (foundCustomers == null) throw new Exception("No customers in Database.");
                 //.Where(c => c.FirstName == firstName && c.LastName == lastName).ToList();
                 foreach(Customer cust in foundCustomers)
                 {
@@ -100,8 +101,8 @@ namespace ProjectZero.Library.RunnerClasses
         void AddCustomer(DataAccess.Model.Customer cust)
         {
             if (cust == null) throw new Exception("null cust");
-            if (_dbContext == null) throw new Exception("It's not good.");
-            _dbContext.Customer.Add(cust);
+            if (ProZeroRepo.DbContext == null) throw new Exception("It's not good.");
+            ProZeroRepo.DbContext.Customer.Add(cust);
             Save();
         }
 
@@ -122,7 +123,7 @@ namespace ProjectZero.Library.RunnerClasses
 
         List<DataAccess.Model.StoreOrder> GetCustomerOrderHistory(Customer customer)
         {
-            List<DataAccess.Model.StoreOrder> orders = _dbContext.Customer.Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
+            List<DataAccess.Model.StoreOrder> orders = ProZeroRepo.DbContext.Customer.Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
             .SelectMany(o => o.OrderHistory)
             .SelectMany(h => h.StoreOrder).ToList();
             return orders;
@@ -130,7 +131,7 @@ namespace ProjectZero.Library.RunnerClasses
         void Save()
         {
             //s_logger.Info("Saving changes to the database");
-            _dbContext.SaveChanges();
+            ProZeroRepo.DbContext.SaveChanges();
         }
 
 

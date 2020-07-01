@@ -23,11 +23,11 @@ namespace ProjectZero
             return new ProZeroContext(optionsBuilder.Options);
         }
 
-        public IProZeroRepo CreateProZero()
-        {
-            var dbContext = CreateDbContext();
-            return new ProZeroRepo(dbContext);
-        }
+        //public IProZeroRepo CreateProZero()
+        //{
+        //    var dbContext = CreateDbContext();
+        //    return new ProZeroRepo(dbContext);
+        //}
 
         public XmlSerializer CreateXmlSerializer()
         {

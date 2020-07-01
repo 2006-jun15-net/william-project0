@@ -16,11 +16,11 @@ namespace ProjectZero
             await ProZeroRepo.CreateProZeroDbContextAsync();
 
 
-            await StoreLoopAsync();
+            StoreLoopAsync();
             
         }
 
-        public static async Task StoreLoopAsync()
+        public static void StoreLoopAsync()
         {
             // Take input
             string choice = "";
@@ -44,10 +44,10 @@ namespace ProjectZero
                 switch (choice.ToLower())
                 {
                     case "cc":
-                        await CustomerRunner.CreateCustomerAsync();
+                        CustomerRunner.CreateCustomer();
                         break;
                     case "dc":
-                        await CustomerRunner.DisplayCustomersAsync();
+                        CustomerRunner.DisplayCustomers();
                         break;
                     case "do":
                         Console.WriteLine("order deets");
