@@ -1,7 +1,10 @@
-﻿using ProjectZero.DataAccess;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using ProjectZero.DataAccess;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
@@ -58,6 +61,68 @@ namespace ProjectZero.Library.RunnerClasses
             catch
             {
                 Debug.WriteLine("Exception getting store history in StoreRunner.");
+            }
+        }
+
+        public static void PlaceOrder()
+        {
+            Console.WriteLine("Enter the name of a product to order");
+            string name = Console.ReadLine();
+            // GetProductByName
+            var entProd = ProZeroRepo.DbContext.Product.Where(p => p.Name == name).First();
+
+            // Get store location
+            Console.WriteLine("Enter the name of a location to order from.");
+            string storeName = Console.ReadLine();
+            var entLoc = ProZeroRepo.DbContext.StoreLocation.First(s => s.Name == storeName);
+
+            int? stockQty = entLoc?.Inventory?.Select(i => i.Amount)?.First() ?? 0;
+
+            if(stockQty == 0)
+            {
+                Console.WriteLine("This product is out of stock.");
+                return;
+            }
+
+            while (true)
+            {
+                Console.WriteLine("Enter the quantity of a product to order or 0 (zero) to cancel order.");
+                int qty = int.Parse(Console.ReadLine());
+
+                // check if that is too many.
+                if(stockQty >= qty && qty > 0)
+                {
+                    Console.WriteLine("What is the name for this order? (firstName lastName)");
+                    string[] tokens = Console.ReadLine().Split();
+                    string firstName = tokens[0].ToLower();
+                    string lastName = tokens[1].ToLower();
+
+                    stockQty -= qty;
+                    var sord = new DataAccess.Model.StoreOrder()
+                    {
+                        Amount = stockQty,
+                        Product = entProd,
+                        Order = null
+                    };
+                    ProZeroRepo.DbContext.StoreOrder.Add(sord);
+
+                    ProZeroRepo.DbContext.OrderHistory.Add(
+                        new DataAccess.Model.OrderHistory()
+                        {
+                            Date = DateTime.Now.Date,
+                            Time = DateTime.Now.TimeOfDay,
+                            Location = entLoc,
+                            StoreOrder = new Collection<DataAccess.Model.StoreOrder>() { sord},
+                            Customer = new DataAccess.Model.Customer() { FirstName = firstName, LastName = lastName}
+                        }
+                      );
+                    // Save changes to database
+                    ProZeroRepo.DbContext.SaveChanges();
+                }
+                if(qty == 0)
+                {
+                    Console.WriteLine("Canceling order...");
+                }
             }
         }
     }

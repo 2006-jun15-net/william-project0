@@ -70,7 +70,7 @@ namespace ProjectZero
                         Console.WriteLine("new loaction"); /// ToDo ///
                         break;
                     case "place":
-                        Console.WriteLine("place order"); /// ToDo ///
+                        StoreRunner.PlaceOrder(); /// ToDo ///
                         break;
                     case "search":
                         CustomerRunner.DisplayCustomerSearch(); ///
