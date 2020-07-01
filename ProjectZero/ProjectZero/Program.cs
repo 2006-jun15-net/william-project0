@@ -31,7 +31,8 @@ namespace ProjectZero
                 Console.WriteLine("\n[option] - (operation to execute)");
                 Console.WriteLine("cc - Create new customer.");
                 Console.WriteLine("dc - Display table of customers.");
-                Console.WriteLine("do - Display details of an order.");
+                //Console.WriteLine("do - Display details of an order.");
+                Console.WriteLine("do - Display orders.");
                 Console.WriteLine("soh - Display store order history.");
                 Console.WriteLine("coh - Display customer order history.");
                 Console.WriteLine("open - Open a new store location.");
@@ -40,32 +41,39 @@ namespace ProjectZero
                 Console.WriteLine("(q or quit) - Quit program.");
                 Console.WriteLine("[h or help] - Display help.\n");
 
-                choice = Console.ReadLine();
+                try
+                {
+                    choice = Console.ReadLine();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Invalid input. {ex.Message}");
+                }
                 switch (choice.ToLower())
                 {
                     case "cc":
-                        CustomerRunner.CreateCustomer();
+                        CustomerRunner.CreateCustomer(); ///
                         break;
                     case "dc":
-                        CustomerRunner.DisplayCustomers();
+                        CustomerRunner.DisplayCustomers(); ///
                         break;
                     case "do":
-                        Console.WriteLine("order deets");
+                        OrderRunner.DisplayOrders(); ///
                         break;
                     case "soh":
-                        Console.WriteLine("store hist");
+                        Console.WriteLine("store hist"); /// ToDo ///
                         break;
                     case "coh":
-                        CustomerRunner.DisplayCustomerDetails();
+                        CustomerRunner.DisplayCustomerDetails(); ///
                         break;
                     case "open":
-                        Console.WriteLine("new loaction");
+                        Console.WriteLine("new loaction"); /// ToDo ///
                         break;
                     case "place":
-                        Console.WriteLine("place order");
+                        Console.WriteLine("place order"); /// ToDo ///
                         break;
                     case "search":
-                        CustomerRunner.DisplayCustomerSearch();
+                        CustomerRunner.DisplayCustomerSearch(); ///
                         break;
                     case "q":
                     case "quit":
