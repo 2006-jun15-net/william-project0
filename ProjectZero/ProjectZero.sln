@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZero", "ProjectZero\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZero.Library", "ProjectZero.Library\ProjectZero.Library.csproj", "{DEE5C9C1-A6A3-4ECC-AB3B-C88FB650B25F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectZero.DataAccess", "ProjectZero.DataAccess\ProjectZero.DataAccess.csproj", "{392B9046-CC32-44E4-B7AF-262699359859}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectZero.DataAccess", "ProjectZero.DataAccess\ProjectZero.DataAccess.csproj", "{392B9046-CC32-44E4-B7AF-262699359859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProject0", "XUnitTestProject0\XUnitTestProject0.csproj", "{1FACD1CB-046D-401C-8265-D1C91B2A34BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestProject0", "XUnitTestProject0\XUnitTestProject0.csproj", "{1FACD1CB-046D-401C-8265-D1C91B2A34BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

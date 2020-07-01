@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using ProjectZero.Library;
 
 namespace ProjectZero.DataAccess
 {
@@ -37,6 +37,61 @@ namespace ProjectZero.DataAccess
                 OrderHistory = customer.OrderHistory.Select(Maps.Map).ToList(),
             };
         }
+        /// <summary>
+        /// Map StoreLocation from RunnerClasses <=> Model
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        public static Library.RunnerClasses.StoreLocation MapLocation(Model.StoreLocation location)
+        {
+            return new Library.RunnerClasses.StoreLocation
+            {
+                LocationId = location.LocationId,
+                Address = location.Address,
+                Name = location.Name,
+                Inventory = location.Inventory.Select(Maps.Map).ToList(),
+                OrderHistory = location.OrderHistory.Select(Maps.Map).ToList()
+            };
+        }
+        public static Model.StoreLocation MapLocation(Library.RunnerClasses.StoreLocation location)
+        {
+            return new Model.StoreLocation
+            {
+                LocationId = location.LocationId,
+                Address = location.Address,
+                Name = location.Name,
+                Inventory = location.Inventory.Select(Maps.Map).ToList(),
+                OrderHistory = location.OrderHistory.Select(Maps.Map).ToList()
+            };
+        }
+        /// <summary>
+        /// Map Product from RunnerClasses <=> Model
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public static Library.RunnerClasses.Product MapProduct(Model.Product product)
+        {
+            return new Library.RunnerClasses.Product
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Price = product.Price ?? throw new Exception("Null Price on Product in mapper maps."),
+                StoreOrder = product.StoreOrder.Select(Maps.Map).ToList(),
+                Inventory = product.Inventory.Select(Maps.Map).ToList()
+            };
+        }
+        public static Model.Product MapProduct(Library.RunnerClasses.Product product)
+        {
+            return new Model.Product
+            {
+                ProductId = product.ProductId,
+                Name = product.Name,
+                Price = product.Price ?? throw new Exception("Null Price on Product in mapper maps."),
+                StoreOrder = product.StoreOrder.Select(Maps.Map).ToList(),
+                Inventory = product.Inventory.Select(Maps.Map).ToList()
+            };
+        }
+
 
 
 
@@ -46,7 +101,7 @@ namespace ProjectZero.DataAccess
 
     }
 
-    class Maps
+    public class Maps
     {
         /// <summary>
         /// Maps OrderHistory to other OrderHistory
@@ -62,8 +117,8 @@ namespace ProjectZero.DataAccess
                 LocationId = orderHist.LocationId ?? throw new Exception("Null Location ID in Mapper Maps"),
                 Date = orderHist.Date,
                 Time = orderHist.Time,
-                Customer = orderHist.Customer.Select(Map).ToList(),
-                Location = orderHist.Location.Select(Map).ToList(),
+                Customer = Mapper.MapCustomer(orderHist.Customer),
+                Location = Mapper.MapLocation(orderHist.Location),
                 StoreOrder = orderHist.StoreOrder.Select(Map).ToList()
             };
         }
@@ -76,8 +131,8 @@ namespace ProjectZero.DataAccess
                 LocationId = orderHist.LocationId ?? throw new Exception("Null Location ID in Mapper Maps"),
                 Date = orderHist.Date,
                 Time = orderHist.Time,
-                //Customer = Mapper.MapCustomer(orderHist.Customer.),
-                Location = orderHist.Location.Select(Map).ToList(),
+                Customer = Mapper.MapCustomer(orderHist.Customer),
+                Location = Mapper.MapLocation(orderHist.Location),
                 StoreOrder = orderHist.StoreOrder.Select(Map).ToList()
             };
         }
@@ -106,6 +161,56 @@ namespace ProjectZero.DataAccess
                 LastName = customer.LastName,
                 Email = customer.Email,
                 OrderHistory = customer.OrderHistory.Select(Map).ToList()
+            };
+        }
+        /// <summary>
+        /// Maps Inventory to other Inventory
+        /// </summary>
+        /// <param name="inventory"></param>
+        /// <returns></returns>
+        public static Library.RunnerClasses.Inventory Map(Model.Inventory inventory)
+        {
+            return new Library.RunnerClasses.Inventory
+            {
+                LocationId = inventory.LocationId,
+                ProductId = inventory.ProductId,
+                Amount = inventory.Amount ?? throw new Exception("Null amount of inventory in mapper maps."),
+                Location = Mapper.MapLocation(inventory.Location),
+                Product = Mapper.MapProduct(inventory.Product)
+            };
+        }
+        public static Model.Inventory Map(Library.RunnerClasses.Inventory inventory)
+        {
+            return new Model.Inventory
+            {
+                LocationId = inventory.LocationId,
+                ProductId = inventory.ProductId,
+                Amount = inventory.Amount ?? throw new Exception("Null amount of inventory in mapper maps."),
+                Location = Mapper.MapLocation(inventory.Location),
+                Product = Mapper.MapProduct(inventory.Product)
+            };
+        }
+        /// <summary>
+        /// Maps StoreOrder to other StoreOrder
+        /// </summary>
+        /// <param name="storeOrder"></param>
+        /// <returns></returns>
+        public static Library.RunnerClasses.StoreOrder Map(Model.StoreOrder storeOrder)
+        {
+            return new Library.RunnerClasses.StoreOrder
+            {
+                OrderId = storeOrder.OrderId,
+                ProductId = storeOrder.ProductId,
+                Amount = storeOrder.Amount ?? throw new Exception("Null amount of StoreOrder in mapper maps.")
+            };
+        }
+        public static Model.StoreOrder Map(Library.RunnerClasses.StoreOrder storeOrder)
+        {
+            return new Model.StoreOrder
+            {
+                OrderId = storeOrder.OrderId,
+                ProductId = storeOrder.ProductId,
+                Amount = storeOrder.Amount ?? throw new Exception("Null amount of StoreOrder in mapper maps.")
             };
         }
 

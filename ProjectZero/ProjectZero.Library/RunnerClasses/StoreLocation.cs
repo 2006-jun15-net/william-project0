@@ -9,7 +9,7 @@ namespace ProjectZero.Library.RunnerClasses
         private string _name;
         private string _address;
 
-        public int Id { get; set; }
+        public int LocationId { get; set; }
 
         public string Name
         {

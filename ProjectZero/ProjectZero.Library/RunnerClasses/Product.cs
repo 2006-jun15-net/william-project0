@@ -8,7 +8,7 @@ namespace ProjectZero.Library.RunnerClasses
     public class Product
     {
         private string _name;
-        private double? _price;
+        private decimal? _price;
 
         public string Name
         {
@@ -26,12 +26,12 @@ namespace ProjectZero.Library.RunnerClasses
             }
         }
 
-        public double? Price
+        public decimal? Price
         {
             get => _price;
             set
             {
-                if(value >= 0.00)
+                if(value >= 0.00m)
                 {
                     _price = value;
                 }
@@ -45,7 +45,7 @@ namespace ProjectZero.Library.RunnerClasses
         public int ProductId { get; set; }
 
         public List<Inventory> Inventory { get; set; } = new List<Inventory>();
-        public List<StoreOrder> Reviews { get; set; } = new List<StoreOrder>();
+        public List<StoreOrder> StoreOrder { get; set; } = new List<StoreOrder>();
         //public override string ToString()
         //{
         //    return "Product: " + Name + "=" + Cost.ToString("C2");

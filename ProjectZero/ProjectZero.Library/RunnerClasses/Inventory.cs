@@ -27,8 +27,8 @@ namespace ProjectZero.Library.RunnerClasses
         public int LocationId { get; set; }
         public int ProductId { get; set; }
 
-        public List<StoreLocation> Location { get; set; } = new List<StoreLocation>();
-        public List<Product> Product { get; set; } = new List<Product>();
+        public StoreLocation Location { get; set; } = new StoreLocation();
+        public Product Product { get; set; } = new Product();
     }
 }
 

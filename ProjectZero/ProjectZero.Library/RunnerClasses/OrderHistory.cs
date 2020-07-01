@@ -38,8 +38,8 @@ namespace ProjectZero.Library.RunnerClasses
         public int? CustomerId { get; set; }
         public int? LocationId { get; set; }
 
-        public List<Customer> Customer { get; set; } = new List<Customer>();
-        public List<StoreLocation> Location { get; set; } = new List<StoreLocation>();
+        public Customer Customer { get; set; } = new Customer();
+        public StoreLocation Location { get; set; } = new StoreLocation();
         public List<StoreOrder> StoreOrder { get; set; } = new List<StoreOrder>();
 
         //public override string ToString()

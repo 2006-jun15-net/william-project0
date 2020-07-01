@@ -12,7 +12,9 @@ namespace ProjectZero
         {
             Console.WriteLine("Hi! Welcome to Willy's!");
 
-            // Populate data from file, if any exists
+            // Populate database
+            await ProZeroRepo.CreateProZeroDbContextAsync();
+
 
             await StoreLoopAsync();
             

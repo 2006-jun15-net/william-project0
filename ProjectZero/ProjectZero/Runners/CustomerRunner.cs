@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using ProjectZero.Library.Interfaces;
-using ProjectZero.Library.Model;
+﻿using ProjectZero.Library.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ProjectZero.DataAccess;
 //using NLog;
 
 
@@ -14,9 +12,9 @@ namespace ProjectZero.Library.RunnerClasses
     public class CustomerRunner //: IProZeroRepo
     {
         //private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
-        private static readonly ProZeroContext _dbContext;
+        private static readonly DataAccess.Model.ProZeroContext _dbContext;
 
-        
+
 
         public static async Task CreateCustomerAsync()
         {
@@ -28,12 +26,12 @@ namespace ProjectZero.Library.RunnerClasses
                 string firstName = tokens[0].ToLower();
                 string lastName = tokens[1].ToLower();
 
-                if(firstName.Length < 1 || lastName.Length < 1)
+                if (firstName.Length < 1 || lastName.Length < 1)
                 {
                     throw new Exception("First and/or last name was empty.");
                 }
 
-                Customer customer = new Customer(){FirstName = firstName, LastName=lastName};
+                DataAccess.Model.Customer customer = new DataAccess.Model.Customer() { FirstName = firstName, LastName = lastName };
                 new CustomerRunner().AddCustomer(customer);
             }
             catch (Exception ex)
@@ -46,14 +44,15 @@ namespace ProjectZero.Library.RunnerClasses
         {
             try
             {
-                List<Customer> customerList = _dbContext.Customer.ToList();
-                // IEnumerable<Customer>customers = _dbContext.Customer;
-                foreach(Customer customer in customerList)
-                {
-                    Console.WriteLine("Customer: " + customer);
-                }
+                //Maps.Map(_dbContext.Customer);
+                
+                //// IEnumerable<Customer>customers = _dbContext.Customer;
+                //foreach (Customer customer in customerList)
+                //{
+                //    Console.WriteLine("Customer: " + customer);
+                //}
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("No customers added. " + ex.Message);
             }
@@ -69,14 +68,24 @@ namespace ProjectZero.Library.RunnerClasses
                 string[] tokens = Console.ReadLine().Split();
                 string firstName = tokens[0].ToLower();
                 string lastName = tokens[1].ToLower();
-                
-                List<Customer> foundCustomers = _dbContext.Customer
-                .Where(c => c.FirstName == firstName && c.LastName == lastName).ToList();
 
-                if(foundCustomers.Count > 0)
+                List<Customer> foundCustomers = _dbContext.Customer.Select(Maps.Map).ToList();
+
+                //.Where(c => c.FirstName == firstName && c.LastName == lastName).ToList();
+                foreach(Customer cust in foundCustomers)
+                {
+                    if(cust.FirstName != firstName || cust.LastName != lastName)
+                    {
+                        foundCustomers.Remove(cust);
+                    }
+                }
+
+                if (foundCustomers.Count > 0)
                 {
                     return foundCustomers;
-                } else {
+                }
+                else
+                {
                     throw new Exception("Customer not found exception.");
                 }
             }
@@ -88,10 +97,12 @@ namespace ProjectZero.Library.RunnerClasses
         }
 
         // Add customer to database
-        void AddCustomer(Customer cust)
+        void AddCustomer(DataAccess.Model.Customer cust)
         {
-            _dbContext.Customer.Add((Customer)cust);
-            Save();   
+            if (cust == null) throw new Exception("null cust");
+            if (_dbContext == null) throw new Exception("It's not good.");
+            _dbContext.Customer.Add(cust);
+            Save();
         }
 
         Customer GetCustomerById(int id, int? id2)
@@ -101,7 +112,7 @@ namespace ProjectZero.Library.RunnerClasses
 
         public static void DisplayCustomerDetails()
         {
-            List<Customer> customers = SearchForCustomer();   
+            List<Customer> customers = SearchForCustomer();
             foreach (var cust in customers)
             {
                 Console.WriteLine("Id: " + cust.CustomerId);
@@ -109,9 +120,9 @@ namespace ProjectZero.Library.RunnerClasses
             }
         }
 
-        List<StoreOrder> GetCustomerOrderHistory(Customer customer)
+        List<DataAccess.Model.StoreOrder> GetCustomerOrderHistory(Customer customer)
         {
-            List<StoreOrder> orders = _dbContext.Customer.Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
+            List<DataAccess.Model.StoreOrder> orders = _dbContext.Customer.Where(c => c.FirstName == customer.FirstName && c.LastName == customer.LastName)
             .SelectMany(o => o.OrderHistory)
             .SelectMany(h => h.StoreOrder).ToList();
             return orders;
@@ -125,7 +136,7 @@ namespace ProjectZero.Library.RunnerClasses
 
 
 
-////////////// Why is it doing this?
+        ////////////// Why is it doing this?
         // void IProZeroRepo.AddObject(object obj)
         // {
 
