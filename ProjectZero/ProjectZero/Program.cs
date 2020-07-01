@@ -67,10 +67,10 @@ namespace ProjectZero
                         CustomerRunner.DisplayCustomerDetails(); ///
                         break;
                     case "open":
-                        Console.WriteLine("new loaction"); /// ToDo ///
+                        StoreRunner.CreateNewLocation(); /// 
                         break;
                     case "place":
-                        StoreRunner.PlaceOrder(); /// ToDo ///
+                        StoreRunner.PlaceOrder(); /// buggy
                         break;
                     case "search":
                         CustomerRunner.DisplayCustomerSearch(); ///

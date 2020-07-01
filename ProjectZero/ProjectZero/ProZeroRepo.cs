@@ -12,10 +12,6 @@ namespace ProjectZero
         private static readonly List<IDisposable> _disposables = new List<IDisposable>();
         private static ProZeroContext _dbContext;
 
-        //public ProZeroRepo(ProZeroContext dbContext)
-        //{
-        //    this._dbContext = dbContext;
-        //}
         public static ProZeroContext DbContext
         {
             get

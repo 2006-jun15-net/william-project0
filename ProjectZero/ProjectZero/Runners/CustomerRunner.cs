@@ -15,17 +15,21 @@ namespace ProjectZero.Library.RunnerClasses
         //private static readonly ILogger s_logger = LogManager.GetCurrentClassLogger();
         //private readonly DataAccess.Model.ProZeroContext _dbContext;
 
+        public static string[] SplitGetFirstAndLast(string firstLast)
+        {
+            return firstLast.Split();
+        }
 
 
         public static void CreateCustomer()
         {
             Console.WriteLine("Enter first and last name (firstName lastName)");
-
+            string[] tokens = Console.ReadLine().Split();
+            string firstName = tokens[0].ToLower();
+            string lastName = tokens[1].ToLower();
             try
             {
-                string[] tokens = Console.ReadLine().Split();
-                string firstName = tokens[0].ToLower();
-                string lastName = tokens[1].ToLower();
+                
 
                 if (firstName.Length < 1 || lastName.Length < 1)
                 {

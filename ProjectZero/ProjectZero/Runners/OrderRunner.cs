@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ProjectZero.Library.RunnerClasses
 {
-    class OrderRunner
+    public class OrderRunner
     {
         public static void PlaceOrder(string fileName)
         {

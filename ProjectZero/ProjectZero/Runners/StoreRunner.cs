@@ -1,12 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using ProjectZero.DataAccess;
+﻿using ProjectZero.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 namespace ProjectZero.Library.RunnerClasses
 {
@@ -124,6 +121,38 @@ namespace ProjectZero.Library.RunnerClasses
                     Console.WriteLine("Canceling order...");
                 }
             }
+        }
+
+        public static void CreateNewLocation()
+        {
+            try
+            {
+                Console.WriteLine("Enter a location name: ");
+                string locName = Console.ReadLine();
+                Console.WriteLine("Enter address of your new location.");
+                string addr = Console.ReadLine();
+
+                // Check if location already exists.
+
+                // Add some inventory
+
+                DataAccess.Model.StoreLocation entLoc =
+                    new DataAccess.Model.StoreLocation()
+                    {
+                        Name = locName,
+                        Address = addr,
+                        Inventory = new Collection<DataAccess.Model.Inventory>()
+                    };
+                    
+                ProZeroRepo.DbContext.StoreLocation.Add(entLoc);
+                ProZeroRepo.DbContext.SaveChanges();
+                Console.WriteLine("Location was added successfully.");
+            }
+            catch
+            {
+                Console.WriteLine("Location already exists or input was invalid.");
+            }
+            
         }
     }
 }
