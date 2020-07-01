@@ -61,7 +61,7 @@ namespace ProjectZero
                         OrderRunner.DisplayOrders(); ///
                         break;
                     case "soh":
-                        Console.WriteLine("store hist"); /// ToDo ///
+                        StoreRunner.DisplayStoreHistory(); ///
                         break;
                     case "coh":
                         CustomerRunner.DisplayCustomerDetails(); ///
