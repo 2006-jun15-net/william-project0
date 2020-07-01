@@ -1,35 +1,82 @@
 ﻿using ProjectZero.DataAccess;
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 
 
 namespace ProjectZero.Library.RunnerClasses
 {
     public class OrderRunner
     {
-        public static void PlaceOrder(string fileName)
+        public static void PlaceOrder()
         {
-            Console.WriteLine("Enter a name for your order (firstName lastName)");
-
+            Console.WriteLine("Enter the name of a product to order");
             try
             {
-                string[] tokens = Console.ReadLine().Split();
-                string firstName = tokens[0].ToLower(),
-                        lastName = tokens[1].ToLower();
+                string name = Console.ReadLine();
+                // GetProductByName
+                var entProd = ProZeroRepo.DbContext.Product.Where(p => p.Name == name).First();
 
-                Console.WriteLine("Enter product code to order:");
+                // Get store location
+                Console.WriteLine("Enter the name of a location to order from.");
+                string storeName = Console.ReadLine();
+                var entLoc = ProZeroRepo.DbContext.StoreLocation.First(s => s.Name == storeName);
 
+                int? stockQty = entLoc?.Inventory?.Select(i => i.Amount)?.First() ?? 0;
 
+                if (stockQty == 0)
+                {
+                    Console.WriteLine("This product is out of stock.");
+                    return;
+                }
 
+                while (true)
+                {
+                    Console.WriteLine("Enter the quantity of a product to order or 0 (zero) to cancel order.");
+                    int qty = int.Parse(Console.ReadLine());
 
+                    // check if that is too many.
+                    if (stockQty >= qty && qty > 0)
+                    {
+                        Console.WriteLine("What is the name for this order? (firstName lastName)");
+                        string[] tokens = Console.ReadLine().Split();
+                        string firstName = tokens[0].ToLower();
+                        string lastName = tokens[1].ToLower();
+
+                        stockQty -= qty;
+                        var sord = new DataAccess.Model.StoreOrder()
+                        {
+                            Amount = stockQty,
+                            Product = entProd,
+                            Order = null
+                        };
+                        ProZeroRepo.DbContext.StoreOrder.Add(sord);
+
+                        ProZeroRepo.DbContext.OrderHistory.Add(
+                            new DataAccess.Model.OrderHistory()
+                            {
+                                Date = DateTime.Now.Date,
+                                Time = DateTime.Now.TimeOfDay,
+                                Location = entLoc,
+                                StoreOrder = new Collection<DataAccess.Model.StoreOrder>() { sord },
+                                Customer = new DataAccess.Model.Customer() { FirstName = firstName, LastName = lastName }
+                            }
+                          );
+                        // Save changes to database
+                        ProZeroRepo.DbContext.SaveChanges();
+                    }
+                    // Cancel order
+                    if (qty == 0)
+                    {
+                        Console.WriteLine("Canceling order...");
+                    }
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("Invalid input. Order canceled.");
-            }
+                Console.WriteLine(ex.Message);
+            }   
         }
 
         public static void DisplayOrders()

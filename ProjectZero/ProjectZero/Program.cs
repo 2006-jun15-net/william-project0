@@ -70,7 +70,7 @@ namespace ProjectZero
                         StoreRunner.CreateNewLocation(); /// 
                         break;
                     case "place":
-                        StoreRunner.PlaceOrder(); /// buggy
+                        OrderRunner.PlaceOrder(); ///
                         break;
                     case "search":
                         CustomerRunner.DisplayCustomerSearch(); ///
