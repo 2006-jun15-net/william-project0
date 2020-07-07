@@ -24,10 +24,11 @@ namespace ProjectZero
             }
         }
 
-        public static async Task CreateProZeroDbContextAsync()
+        private async Task CreateProZeroDbContextAsync()
         {
-            var optionsBuilder = new DbContextOptionsBuilder<ProZeroContext>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+            var optionsBuilder = new DbContextOptionsBuilder<ProZeroContext>()
+                .UseSqlServer(SecretConfiguration.ConnectionString)
+                .optionsBuilder;
 
             var dbContext = new ProZeroContext(optionsBuilder.Options ?? throw new Exception("Failed to create DbContext..."));
             _disposables.Add(dbContext);
