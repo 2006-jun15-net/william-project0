@@ -16,7 +16,9 @@ namespace ProjectZero
         {
             get
             {
+                // If there is no context throw this exception.
                 return _dbContext ?? throw new Exception("Connection Lost. Restart program.");
+                // 
             }
             set
             {
