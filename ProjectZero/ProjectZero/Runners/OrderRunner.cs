@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 
@@ -14,16 +15,35 @@ namespace ProjectZero.Library.RunnerClasses
             Console.WriteLine("Enter the name of a product to order");
             try
             {
-                string name = Console.ReadLine();
+                string prodName = Console.ReadLine().ToLower();
                 // GetProductByName
-                var entProd = ProZeroRepo.DbContext.Product.Where(p => p.Name == name).First();
+                var entProd = ProZeroRepo.DbContext.Product.Where(p => p.Name == prodName).First() ??
+                    new DataAccess.Model.Product();
 
                 // Get store location
                 Console.WriteLine("Enter the name of a location to order from.");
-                string storeName = Console.ReadLine();
-                var entLoc = ProZeroRepo.DbContext.StoreLocation.First(s => s.Name == storeName);
+                string storeName = Console.ReadLine().ToLower();
+                ////////// Fix this
+                DataAccess.Model.StoreLocation entLoc =
+                    ProZeroRepo.DbContext.StoreLocation
+                    .Where(l => l.Name == storeName)
+                     ??
+                        throw new Exception("No such location was found.");
+                if(entLoc.Inventory.Count < 1)
+                {
+                    Debug.WriteLine("No inventory or failed to map");
+                }
 
-                int? stockQty = entLoc?.Inventory?.Select(i => i.Amount)?.First() ?? 0;
+                ///
+                int stockQty = entLoc.Inventory.Where(i => i.Location.Name == storeName)
+                    .Where(p => p.Product.Name == prodName)
+                    .First()
+                    .Amount ??
+                        throw new Exception("No such location was found.");
+   //             System.InvalidOperationException: Sequence contains no elements
+   //at System.Linq.ThrowHelper.ThrowNoElementsException()
+   //at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   //at ProjectZero.Library.RunnerClasses.OrderRunner.PlaceOrder() in C:\Revature\code\william - project0\ProjectZero\ProjectZero\Runners\OrderRunner.cs:line 29
 
                 if (stockQty == 0)
                 {
@@ -75,7 +95,8 @@ namespace ProjectZero.Library.RunnerClasses
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }   
         }
 
