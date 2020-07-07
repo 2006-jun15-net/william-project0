@@ -16,7 +16,7 @@ namespace ProjectZero
         {
             get
             {
-                return _dbContext ?? throw new Exception("Connection Not Found. Restart program.");
+                return _dbContext ?? throw new Exception("Connection was Definitely Not Found. Restart program.");
             }
             set
             {
